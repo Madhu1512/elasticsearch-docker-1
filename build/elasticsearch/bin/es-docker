@@ -27,7 +27,7 @@ done < <(env)
 # them being installed.
 # Example -e ES_PLUGINS_INSTALL="ingest-geoip,discovery-ec2,ingest-user-agent"
 
-if [ ! -z "${ES_PLUGINS_INSTALL" ]; then
+if [ ! -z "${ES_PLUGINS_INSTALL}" ]; then
    OLDIFS=$IFS
    IFS=','
    for plugin in ${ES_PLUGINS_INSTALL}; do

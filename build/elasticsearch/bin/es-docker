@@ -22,6 +22,22 @@ do
     fi
 done < <(env)
 
+# Ability to install Elasticsearch Plugins via Environment Variable.
+# This logic also check if any plugins are already installed and ignores
+# them being installed.
+# Example -e ES_PLUGINS_INSTALL="ingest-geoip,discovery-ec2,ingest-user-agent"
+
+if [ ! -z "${ES_PLUGINS_INSTALL" ]; then
+   OLDIFS=$IFS
+   IFS=','
+   for plugin in ${ES_PLUGINS_INSTALL}; do
+      if ! bin/elasticsearch-plugin list | grep -qs ${plugin}; then
+         yes | bin/elasticsearch-plugin install --batch ${plugin}
+      fi
+   done
+   IFS=$OLDIFS
+fi
+
 # The virtual file /proc/self/cgroup should list the current cgroup
 # membership. For each hierarchy, you can follow the cgroup path from
 # this file to the cgroup filesystem (usually /sys/fs/cgroup/) and
